@@ -31,6 +31,13 @@
                 <th>Date_of_last_modification</th>
                 <td>{{ product.dateOfLastModification ? product.dateOfLastModification|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Categories</th>
+                <td>{% for category in product.category %}
+                    <a href="{{ path('category_show', {'id': category.id}) }}">{{  category.name }}</a>
+                {% endfor %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -39,4 +46,5 @@
     <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
 
     {{ include('product/_delete_form.html.twig') }}
+
 {% endblock %}
