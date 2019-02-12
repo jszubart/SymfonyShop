@@ -22,8 +22,6 @@ class ProductType extends AbstractType
             ])
             ->add('description')
             ->add('price')
-            ->add('date_of_creation')
-            ->add('date_of_last_modification')
             ->add('category', EntityType::class, array(
                 'class' => Category::class,
                 'query_builder' => function (EntityRepository $er) {
