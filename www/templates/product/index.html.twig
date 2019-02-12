@@ -5,6 +5,14 @@
 {% block body %}
     <h1>Product index</h1>
 
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <table class="table">
         <thead>
             <tr>
@@ -40,4 +48,5 @@
     </table>
 
     <a href="{{ path('product_new') }}">Create new</a>
+
 {% endblock %}
