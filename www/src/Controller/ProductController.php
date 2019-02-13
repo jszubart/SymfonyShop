@@ -32,6 +32,8 @@ class ProductController extends AbstractController
     public function new(Request $request): Response
     {
         $product = new Product();
+        $product->setDateOfCreation(new \DateTime());
+        $product->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -69,6 +71,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
+        $product->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 

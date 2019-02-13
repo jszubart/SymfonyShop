@@ -31,6 +31,8 @@ class CategoryController extends AbstractController
     public function new(Request $request): Response
     {
         $category = new Category();
+        $category->setDateOfCreation(new \DateTime());
+        $category->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -68,6 +70,7 @@ class CategoryController extends AbstractController
      */
     public function edit(Request $request, Category $category): Response
     {
+        $category->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 

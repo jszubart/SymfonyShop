@@ -18,8 +18,6 @@ class CategoryType extends AbstractType
                 'constraints' => new Length(['min' => 3]),
             ])
             ->add('description')
-            ->add('date_of_creation')
-            ->add('date_of_last_modification')
         ;
     }
 
