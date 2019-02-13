@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @Route("/product")
@@ -38,6 +39,11 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'New product has been added!'
+            );
 
             return $this->redirectToRoute('product_index');
         }
@@ -69,11 +75,15 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash(
+                'notice',
+                'Product has been edited!'
+            );
+
             return $this->redirectToRoute('product_index', [
                 'id' => $product->getId(),
             ]);
         }
-
         return $this->render('product/edit.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
@@ -89,8 +99,12 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
             $entityManager->flush();
-        }
 
+            $this->addFlash(
+                'warning',
+                'Product has been deleted!'
+            );
+        }
         return $this->redirectToRoute('product_index');
     }
 }
