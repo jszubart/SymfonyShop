@@ -79,7 +79,7 @@ class ProductController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash(
-                'notice',
+                'info',
                 'Product has been edited!'
             );
 
@@ -104,7 +104,7 @@ class ProductController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'warning',
+                'danger',
                 'Product has been deleted!'
             );
         }

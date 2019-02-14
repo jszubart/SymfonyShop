@@ -24,6 +24,7 @@ class ProductType extends AbstractType
             ->add('price')
             ->add('category', EntityType::class, array(
                 'class' => Category::class,
+                'attr' => array('style' => 'width: 175px'),
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
