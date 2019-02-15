@@ -1,21 +1,22 @@
 {{ form_start(form) }}
-<div class="container text-center">
-    <div class="col mx-auto">
-        <div class = "row justify-content-center">
-            {{ form_label(form.name) }}
+    {{ form_errors(form.name) }}
+    <div class="container text-center">
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.name) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.name) }}
+            </div>
         </div>
-        <div class = "row justify-content-center">
-            {{ form_widget(form.name) }}
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.description) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.description) }}
+            </div>
         </div>
     </div>
-    <div class="col mx-auto">
-        <div class = "row justify-content-center">
-            {{ form_label(form.description) }}
-        </div>
-        <div class = "row justify-content-center">
-            {{ form_widget(form.description) }}
-        </div>
-    </div>
-</div>
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <button class="btn btn-primary mt-2">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

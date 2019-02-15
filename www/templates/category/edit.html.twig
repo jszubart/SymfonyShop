@@ -5,11 +5,13 @@
 {% block body %}
     <h1>Edit category: {{ category.name }}</h1>
 
-    {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
+    <p>{{ include('category/_form.html.twig', {'button_label': 'Update'}) }}</p>
+
+    <p>{{ include('category/_delete_form.html.twig') }}</p>
 
     <a href="{{ path('category_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
 
-    {{ include('category/_delete_form.html.twig') }}
+
 {% endblock %}
