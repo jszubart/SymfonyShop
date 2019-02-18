@@ -8,9 +8,20 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-        {% endblock %}
+        <div class = "container-fluid text-center">
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+            {% block javascripts %}
+                <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+            {% endblock %}
+        </div>
     </body>
 </html>

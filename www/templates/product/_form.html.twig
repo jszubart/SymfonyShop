@@ -1,4 +1,37 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="container text-center">
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.name) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.name) }}
+            </div>
+        </div>
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.description) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.price) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.price) }}
+            </div>
+        </div>
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(form.category) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(form.category) }}
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary ">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

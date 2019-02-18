@@ -78,7 +78,7 @@ class CategoryController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash(
-                'notice',
+                'info',
                 'Category has been edited!'
             );
 
@@ -104,7 +104,7 @@ class CategoryController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'warning',
+                'danger',
                 'Category has been deleted!'
             );
 
