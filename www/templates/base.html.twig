@@ -8,8 +8,37 @@
         {% endblock %}
     </head>
     <body>
-        <div class = "container-fluid text-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ path('homepage') }}" >SymfonyShop</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {{ render(controller('App\\Controller\\BaseController::showCategoryList')) }}
+                    </div>
+                </li>
+            </ul>
+        </div>
 
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item dropdown mr-auto ">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ path('product_index') }}">Products</a>
+                        <a class="dropdown-item" href="{{ path('category_index') }}">Categories</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+        <div class = "container text-center">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ label }}">
@@ -20,6 +49,7 @@
 
             {% block body %}{% endblock %}
             {% block javascripts %}
+                <script src="{{ asset('assets/js/jquery.js') }}"></script>
                 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
             {% endblock %}
         </div>
