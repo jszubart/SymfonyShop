@@ -11,4 +11,11 @@
     <a href="{{ path('product_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
+    <div>
+        {% for image in product.images %}
+            <input type="checkbox" name="main_photo">
+            <img src="{{ asset(image.path)}}" height="200" width="250"/>
+        {% endfor %}
+    </div>
+
 {% endblock %}

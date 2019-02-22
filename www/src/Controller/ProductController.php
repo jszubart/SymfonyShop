@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Images;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
@@ -31,16 +32,38 @@ class ProductController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $product = new Product();
-        $product->setDateOfCreation(new \DateTime());
-        $product->setDateOfLastModification(new \DateTime());
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
+       $product = new Product();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
+       $form = $this->createForm(ProductType::class, $product);
+       $form->handleRequest($request);
+
+       if ($form->isSubmitted() && $form->isValid())
+       {
+           $entityManager = $this->getDoctrine()->getManager();
+           $files = $request->files->get('product')['images'];
+
+           /** @var UploadedFile $file */
+           foreach ($files as $file)
+           {
+               $image = new Images();
+               $filename = md5(uniqid()).'.'.$file->guessClientExtension();
+               $file->move($this->getParameter('uploads_directory'), $filename);
+
+               $image->setName($filename);
+               $image->setPath('/assets/uploads/' . $filename);
+               $image->setProduct($product);
+               $image->setDateOfCreation(new \DateTime());
+               $image->setMain(0);
+               $product->setImages($image);
+
+               $entityManager->persist($image);
+           }
+
+           $product->setDateOfCreation(new \DateTime());
+           $product->setDateOfLastModification(new \DateTime());
+
+           $entityManager->persist($product);
+           $entityManager->flush();
 
             $this->addFlash(
                 'success',
@@ -71,12 +94,36 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
-        $product->setDateOfLastModification(new \DateTime());
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $files = $request->files->get('product')['images'];
+
+            /** @var UploadedFile $file */
+            foreach ($files as $file)
+            {
+                $image = new Images();
+                $filename = md5(uniqid()).'.'.$file->guessClientExtension();
+                $file->move($this->getParameter('uploads_directory'), $filename);
+
+                $image->setName($filename);
+                $image->setPath('/assets/uploads/' . $filename);
+                $image->setProduct($product);
+                $image->setDateOfCreation(new \DateTime());
+                $image->setMain(0);
+                $product->setImages($image);
+
+                $entityManager->persist($image);
+            }
+
+            $product->setDateOfLastModification(new \DateTime());
+
+            $entityManager->persist($product);
+            $entityManager->flush();
 
             $this->addFlash(
                 'info',
