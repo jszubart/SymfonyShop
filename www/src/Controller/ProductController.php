@@ -90,7 +90,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="product_edit", methods={"GET","POST","DELETE"})
      */
     public function edit(Request $request, Product $product): Response
     {
@@ -156,5 +156,53 @@ class ProductController extends AbstractController
             );
         }
         return $this->redirectToRoute('product_index');
+    }
+
+    /**
+     * @Route("/{id}/main", name="main_image", methods={"GET","POST"})
+     */
+    public function mainImage(Request $request, Product $product): Response
+    {
+        $main_id = $request->query->get('insert');
+        $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($product->getImages() as $value) {
+                if ($value->getId() == $main_id) {
+                    $value->setMain(1);
+                } else
+                    $value->setMain(0);
+            }
+
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+        return $this->redirectToRoute('product_edit', [
+            'id' => $product->getId(),
+            ]);
+    }
+
+    /**
+     * @Route("/{id}/order", name="image_order", methods={"GET","POST"})
+     */
+    public function imageOrder(Request $request,Product $product): Response
+    {
+        $array = explode(",",$request->request->get('ids'));
+        $position = 1;
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($array as $id) {
+            foreach ($product->getImages() as $value) {
+              if ($value->getId() == $id) {
+                    $value->setPosition($position);
+                   $position++;
+                }
+           }
+       }
+        $entityManager->persist($product);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('product_edit', [
+            'id' => $product->getId(),
+        ]);
     }
 }

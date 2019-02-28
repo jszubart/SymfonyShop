@@ -42,6 +42,11 @@ class Images
      */
     private $main;
 
+    /**
+     * @ORM\Column(type="integer", length=3)
+     */
+    private $position = 0;
+
     
     public function getId(): ?int
     {
@@ -104,6 +109,18 @@ class Images
     public function setMain(int $main): self
     {
         $this->main = $main;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }

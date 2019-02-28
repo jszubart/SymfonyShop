@@ -87,10 +87,17 @@ class ImagesController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$image->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $product = $image->getProduct()->getId();
             $entityManager->remove($image);
             $entityManager->flush();
         }
+        $this->addFlash(
+            'danger',
+            'Selected image has been deleted!'
+        );
 
-        return $this->redirectToRoute('images_index');
+        return $this->redirectToRoute('product_edit', [
+            'id' => $product,
+        ]);
     }
 }

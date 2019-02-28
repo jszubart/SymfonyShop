@@ -45,15 +45,14 @@
         <button type = "button" class = "btn btn-primary">Edit</button>
     </a>
 
-    <p> {{ include('product/_delete_form.html.twig') }}
-    </p>
+    <p> {{ include('product/_delete_form.html.twig') }}</p>
 
     <a href="{{ path('product_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
-    <div>
+    <div class="mt-3">
         {% for image in product.images %}
-            <img src="{{ asset(image.path)}}" height="200" width="250"/>
+            <img src="{{ asset(image.path) }}" height="200" width="250"/>
         {% endfor %}
     </div>
 

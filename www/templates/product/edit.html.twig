@@ -11,11 +11,87 @@
     <a href="{{ path('product_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
-    <div>
-        {% for image in product.images %}
-            <input type="checkbox" name="main_photo">
-            <img src="{{ asset(image.path)}}" height="200" width="250"/>
-        {% endfor %}
+    <a href="javascript:void(0);" class="btn btn-info reorder_link" id="saveReorder">Reorder Photos</a>
+
+    <div class="mt-3 mx-auto">
+        <button type="button" class="btn btn-dark " id="submit">Choose main photo</button>
     </div>
+
+    <div class="mt-3 gallery">
+        <ul class="reorder_ul reorder-photos-list" style="list-style: none">
+        {% for image in product.images %}
+            <li id="image_li_{{ image.id }}" class="mt-2 ui-sortable-handle">
+                <a href="javascript:void(0);" style="float: none;" class="image_link">
+                    <input type="checkbox" class="get_value" value="{{ image.id }}"/>
+                    <img src="{{ asset(image.path)}}" height="200" width="250"/>
+                    <a href="{{ path('product_edit', {'id': product.id}) }}">
+                        {{ include('images/_delete_form.html.twig') }}
+                    </a>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('input:checkbox').on('change', function () {
+            $('input:checkbox').not(this).prop('checked', false);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#submit').click(function () {
+            var insert = [];
+            $('.get_value').each(function () {
+                if($(this).is(":checked")) {
+                    insert.push($(this).val());
+                }
+            });
+
+            insert = insert.toString();
+            $.ajax({
+                url: "{{ path('main_image', {'id': product.id}) }}",
+                type: "GET",
+                data: {insert : insert},
+                success: function () {
+                    window.location.reload();
+                    alert("You selected main image successfully!");
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('.reorder_link').on('click',function () {
+            $("ul.reorder-photos-list").sortable({tolerance: 'pointer'});
+            $('.reorder_link').html('Save reordering');
+            $('.reorder_link').attr("id","saveReorder");
+            $('.image_link').attr("href","javascript:void(0);");
+            $('.image_link').css("cursor","move");
+            $("#saveReorder").click(function ( e ) {
+                if( !$("#saveReorder i").length ){
+                    $("ul.reorder-photos-list").sortable('destroy');
+                    var h =[];
+                    $("ul.reorder-photos-list li").each(function () {
+                        h.push($(this).attr('id').substr(9));
+                    });
+
+                    $.ajax({
+                        url: "{{ path('image_order', {'id': product.id}) }}",
+                        type: "POST",
+                        data: {ids: "" + h + ""},
+                        success: function () {
+                           window.location.reload();
+                           alert("U change the order of images successfully!");
+                        }
+                    });
+                    return false;
+                }
+                e.preventDefault();
+            });
+        });
+    });
+    </script>
 
 {% endblock %}

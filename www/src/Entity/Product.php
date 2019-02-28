@@ -50,6 +50,7 @@ class Product
 
     /**
      * @ORM\OnetoMany(targetEntity="App\Entity\Images", mappedBy="product")
+     * @ORM\OrderBy({"position"= "ASC"})
      */
     private $images;
 
@@ -57,7 +58,6 @@ class Product
     {
         $this->category = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
