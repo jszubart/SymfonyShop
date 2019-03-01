@@ -27,17 +27,36 @@
                 <th>Date of last modification</th>
                 <td>{{ category.dateOfLastModification ? category.dateOfLastModification|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
-            <tr>
-                <th>List of products in this category</th>
-                <td>{% for products in category.products %}
-                        <li>
-                            <a href="{{ path('product_show', {'id': products.id}) }}">{{  products.name }}</a>
-                        </li>
-                    {% endfor %}
-                </td>
-            </tr>
         </tbody>
     </table>
+    <div>
+        <h3>List of products in this category</h3>
+            <ul class="list-unstyled">
+                {% for product in category.products %}
+                    <li>
+                        <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }} </a>
+                        {% set count = 0 %}
+                    </li>
+                    {% for image in product.images %}
+                        {% if image.main == 1 %}
+                            <li class="mb-5">
+                                <a href="{{ path('product_show', {'id': product.id}) }}">
+                                    <img src="{{ asset(image.path) }}" height="175" width="200"/>
+                                </a>
+                                {% set count = count + 1 %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if count == 0 %}
+                        <li class="mb-5">
+                            <a href="{{ path('product_show', {'id': product.id}) }}">
+                                <img src="{{ asset('assets/uploads/placeholder.jpg') }}" height="200" width="200"/>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+    </div>
 
     <a href="{{ path('category_edit', {'id': category.id}) }}">
         <button type = "button" class = "btn btn-primary">Edit</button>
