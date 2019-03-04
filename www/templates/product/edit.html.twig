@@ -22,7 +22,7 @@
         {% for image in product.images %}
             <li id="image_li_{{ image.id }}" class="mt-2 ui-sortable-handle">
                 <a href="javascript:void(0);" style="float: none;" class="image_link">
-                    <input type="checkbox" class="get_value" value="{{ image.id }}"/>
+                    <input type="checkbox" class="get_value" value="{{ image.id }}" {% if image.main == 1 %} checked="checked" {% endif %} />
                     <img src="{{ asset(image.path)}}" height="200" width="250"/>
                     <a href="{{ path('product_edit', {'id': product.id}) }}">
                         {{ include('images/_delete_form.html.twig') }}

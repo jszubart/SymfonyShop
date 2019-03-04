@@ -49,7 +49,7 @@ class Product
     private $category;
 
     /**
-     * @ORM\OnetoMany(targetEntity="App\Entity\Images", mappedBy="product")
+     * @ORM\OnetoMany(targetEntity="App\Entity\Images", mappedBy="product", cascade="remove")
      * @ORM\OrderBy({"position"= "ASC"})
      */
     private $images;
