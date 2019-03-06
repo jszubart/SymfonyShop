@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <h1>Register</h1>
+    {{ form_start(registrationForm) }}
+    <div class="container text-center">
+        <div class="custom-error-class">
+            {{ form_errors(registrationForm.username) }}
+            {{ form_errors(registrationForm.email) }}
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(registrationForm.username) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(registrationForm.username) }}
+            </div>
+        </div>
+        <div class="col mx-auto">
+            <div class = "row justify-content-center">
+                {{ form_label(registrationForm.email) }}
+            </div>
+            <div class = "row justify-content-center">
+                {{ form_widget(registrationForm.email) }}
+            </div>
+        </div>
+        <div class="col mx-auto">
+            <div class = "col justify-content-center">
+                {{ form_label(registrationForm.plainPassword.first) }}
+            </div>
+            <div class = "col justify-content-center">
+                {{ form_widget(registrationForm.plainPassword.first) }}
+            </div>
+            <div class = "col justify-content-center">
+                {{ form_label(registrationForm.plainPassword.second) }}
+            </div>
+            <div class = "col justify-content-center">
+                {{ form_widget(registrationForm.plainPassword.second) }}
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary mt-2">Register</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

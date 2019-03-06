@@ -41,7 +41,6 @@ class ProductController extends AbstractController
        {
            $entityManager = $this->getDoctrine()->getManager();
            $files = $request->files->get('product')['images'];
-
            /** @var UploadedFile $file */
            foreach ($files as $file)
            {
@@ -159,7 +158,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/main", name="main_image", methods={"GET","POST"})
+     * @Route("/{id}/main", name="main_image", methods={"GET"})
      */
     public function mainImage(Request $request, Product $product): Response
     {
@@ -182,7 +181,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/order", name="image_order", methods={"GET","POST"})
+     * @Route("/{id}/order", name="image_order", methods={"POST"})
      */
     public function imageOrder(Request $request,Product $product): Response
     {

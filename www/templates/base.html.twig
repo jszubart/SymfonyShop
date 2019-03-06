@@ -5,10 +5,10 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
             <script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}"></script>
             <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
-
         {% endblock %}
     </head>
     <body>
@@ -16,6 +16,7 @@
         <a class="navbar-brand" href="{{ path('homepage') }}" >SymfonyShop</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav">
+                {% if is_granted('ROLE_USER') %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Categories
@@ -24,11 +25,21 @@
                         {{ render(controller('App\\Controller\\BaseController::showCategory')) }}
                     </div>
                 </li>
+                {% endif %}
             </ul>
         </div>
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mx-auto">
+                {% if not is_granted('ROLE_USER') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_register') }}">Register</a>
+                </li>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
                 <li class="nav-item dropdown mr-auto ">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
@@ -38,11 +49,21 @@
                         <a class="dropdown-item" href="{{ path('category_index') }}">Categories</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown mr-auto ">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ path('account') }}">Account</a>
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                </li>
+                {% endif  %}
             </ul>
         </div>
     </nav>
 
-        <div class = "container text-center">
+        <div class = "container-fluid text-center">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ label }}">
