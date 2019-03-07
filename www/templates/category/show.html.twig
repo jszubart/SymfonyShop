@@ -35,25 +35,10 @@
                 {% for product in category.products %}
                     <li>
                         <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }} </a>
-                        {% set count = 0 %}
                     </li>
-                    {% for image in product.images %}
-                        {% if image.main == 1 %}
-                            <li class="mb-5">
-                                <a href="{{ path('product_show', {'id': product.id}) }}">
-                                    <img src="{{ asset(image.path) }}" height="200" width="250"/>
-                                </a>
-                                {% set count = count + 1 %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if count == 0 %}
-                        <li class="mb-5">
-                            <a href="{{ path('product_show', {'id': product.id}) }}">
-                                <img src="{{ asset('assets/uploads/placeholder.jpg') }}" height="200" width="250"/>
-                            </a>
-                        </li>
-                    {% endif %}
+                    <li class="mb-3">
+                        <img src="{{ asset(product.getMainImage) }}" height="200" width="250"/>
+                    </li>
                 {% endfor %}
             </ul>
     </div>
