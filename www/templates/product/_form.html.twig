@@ -32,7 +32,14 @@
             <div class = "row justify-content-center">
                 {{ form_widget(form.category) }}
             </div>
+            <div class="col mx-auto">
+                <div class = "row justify-content-center">
+                    {{ form_label(form.images) }}
+                </div>
+                <div class = "row justify-content-center">
+                    {{ form_widget(form.images) }}
+                </div>
         </div>
     </div>
-    <button class="btn btn-primary mt-2">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary mt-2" id="save_btn">{{ button_label|default('Save') }} </button>
 {{ form_end(form) }}

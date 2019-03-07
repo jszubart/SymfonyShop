@@ -48,11 +48,16 @@ class Product
      */
     private $category;
 
+    /**
+     * @ORM\OnetoMany(targetEntity="App\Entity\Images", mappedBy="product")
+     * @ORM\OrderBy({"position"= "ASC"})
+     */
+    private $images;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -115,6 +120,24 @@ class Product
     public function setDateOfLastModification(\DateTimeInterface $date_of_last_modification): self
     {
         $this->date_of_last_modification = $date_of_last_modification;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    /**
+     * @param $images
+     * @return $this
+     */
+    public function setImages($images)
+    {
+        $this->images[] = $images;
 
         return $this;
     }
