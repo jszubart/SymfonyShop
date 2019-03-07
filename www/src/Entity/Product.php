@@ -49,7 +49,7 @@ class Product
     private $category;
 
     /**
-     * @ORM\OnetoMany(targetEntity="App\Entity\Images", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="product")
      * @ORM\OrderBy({"position"= "ASC"})
      */
     private $images;
@@ -140,6 +140,18 @@ class Product
         $this->images[] = $images;
 
         return $this;
+    }
+
+    public function getMainImage()
+    {
+        $images= $this->images;
+        $placeholder = '/assets/uploads/placeholder.jpg';
+        foreach ($images as $image) {
+            if ($image->getMain() == 1)
+
+                return $image->getPath();
+        }
+        return $placeholder;
     }
 
     /**
