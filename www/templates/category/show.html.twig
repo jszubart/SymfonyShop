@@ -42,13 +42,13 @@
                 {% endfor %}
             </ul>
     </div>
+    {%  if is_granted('edit', category) %}
+        <a href="{{ path('category_edit', {'id': category.id}) }}">
+            <button type = "button" class = "btn btn-primary">Edit</button>
+        </a>
 
-    <a href="{{ path('category_edit', {'id': category.id}) }}">
-        <button type = "button" class = "btn btn-primary">Edit</button>
-    </a>
-
-    <p>{{ include('category/_delete_form.html.twig') }} </p>
-
+        <p>{{ include('category/_delete_form.html.twig') }} </p>
+    {% endif %}
     <a href="{{ path('category_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>

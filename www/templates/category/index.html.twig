@@ -36,9 +36,11 @@
                     <a href="{{ path('category_show', {'id': category.id}) }}">
                         <button type = "button" class = "btn btn-dark">Show</button>
                     </a>
-                    <a href="{{ path('category_edit', {'id': category.id}) }}">
-                        <button type = "button" class = "btn btn-primary">Edit</button>
-                    </a>
+                    {%  if is_granted('edit', category) %}
+                        <a href="{{ path('category_edit', {'id': category.id}) }}">
+                            <button type = "button" class = "btn btn-primary">Edit</button>
+                        </a>
+                    {% endif %}
                 </td>
 
             </tr>

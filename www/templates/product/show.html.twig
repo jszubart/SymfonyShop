@@ -57,12 +57,13 @@
             {% endfor %}
         </div>
 
+    {%  if is_granted('edit', product) %}
+        <a href="{{ path('product_edit', {'id': product.id}) }}">
+            <button type = "button" class = "btn btn-primary">Edit</button>
+        </a>
 
-    <a href="{{ path('product_edit', {'id': product.id}) }}">
-        <button type = "button" class = "btn btn-primary">Edit</button>
-    </a>
-
-    <p> {{ include('product/_delete_form.html.twig') }}</p>
+        <p> {{ include('product/_delete_form.html.twig') }}</p>
+    {% endif  %}
 
     <a href="{{ path('product_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>

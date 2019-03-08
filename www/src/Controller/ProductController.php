@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @Route("/product")
@@ -34,6 +33,8 @@ class ProductController extends AbstractController
     {
        $product = new Product();
 
+       $this->denyAccessUnlessGranted('isUser', $product);
+
        $form = $this->createForm(ProductType::class, $product);
        $form->handleRequest($request);
 
@@ -53,7 +54,9 @@ class ProductController extends AbstractController
                $image->setProduct($product);
                $image->setDateOfCreation(new \DateTime());
                $image->setMain(0);
+               $product->setUser($this->getUser());
                $product->setImages($image);
+
 
                $entityManager->persist($image);
            }
@@ -83,6 +86,8 @@ class ProductController extends AbstractController
      */
     public function show(Product $product): Response
     {
+        $this->denyAccessUnlessGranted('isUser', $product);
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
@@ -93,6 +98,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
+        $this->denyAccessUnlessGranted('edit', $product);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -121,6 +127,8 @@ class ProductController extends AbstractController
 
             $product->setDateOfLastModification(new \DateTime());
 
+            $this->denyAccessUnlessGranted('edit',$product);
+
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -144,6 +152,8 @@ class ProductController extends AbstractController
      */
     public function delete(Request $request, Product $product): Response
     {
+        $this->denyAccessUnlessGranted('edit', $product);
+
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);

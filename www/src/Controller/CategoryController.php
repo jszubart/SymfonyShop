@@ -31,12 +31,17 @@ class CategoryController extends AbstractController
     public function new(Request $request): Response
     {
         $category = new Category();
+
+        $this->denyAccessUnlessGranted('isUser', $category);
+
         $category->setDateOfCreation(new \DateTime());
         $category->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $category->setUser($this->getUser());
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
             $entityManager->flush();
@@ -60,6 +65,8 @@ class CategoryController extends AbstractController
      */
     public function show(Category $category): Response
     {
+        $this->denyAccessUnlessGranted('isUser', $category);
+
         return $this->render('category/show.html.twig', [
             'category' => $category,
         ]);
@@ -70,6 +77,8 @@ class CategoryController extends AbstractController
      */
     public function edit(Request $request, Category $category): Response
     {
+        $this->denyAccessUnlessGranted('edit', $category);
+
         $category->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
@@ -98,6 +107,8 @@ class CategoryController extends AbstractController
      */
     public function delete(Request $request, Category $category): Response
     {
+        $this->denyAccessUnlessGranted('edit', $category);
+
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($category);
