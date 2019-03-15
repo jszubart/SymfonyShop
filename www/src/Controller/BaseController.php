@@ -14,7 +14,7 @@ use App\Entity\Category;
 class BaseController extends AbstractController
 {
 
-    public function showCategory()
+    public function showCategoryList()
     {
         $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
         return $this->render('categorylist.html.twig', [
