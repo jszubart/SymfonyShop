@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Security;
 
 class CategoryVoter extends Voter
 {
-    const EDIT = 'edit';
     const isUser = 'isUser';
 
     private $security;
@@ -22,7 +21,7 @@ class CategoryVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::isUser, self::EDIT])) {
+        if (!in_array($attribute, [self::isUser])) {
             return false;
         }
 
@@ -54,17 +53,8 @@ class CategoryVoter extends Voter
                 }
 
                 break;
-
-            case self::EDIT:
-                return $this->canEdit($category, $user);
-
-                break;
         }
 
         throw new \LogicException('This code should not be reached');
-    }
-
-    public function canEdit(Category $category, User $user){
-        return $category->getUser()->getId() == $user->getId();
     }
 }

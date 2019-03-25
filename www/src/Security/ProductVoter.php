@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Security;
 
 class ProductVoter extends Voter
 {
-    const EDIT = 'edit';
     const isUser = 'isUser';
 
     private $security;
@@ -22,7 +21,7 @@ class ProductVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, [self::isUser, self::EDIT])) {
+        if (!in_array($attribute, [self::isUser])) {
             return false;
         }
 
@@ -55,16 +54,9 @@ class ProductVoter extends Voter
 
                 break;
 
-            case self::EDIT:
-                return $this->canEdit($product, $user);
-
-                break;
         }
 
         throw new \LogicException('This code should not be reached');
     }
 
-    public function canEdit(Product $product, User $user){
-        return $product->getUser()->getId() == $user->getId();
-    }
 }

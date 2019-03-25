@@ -96,7 +96,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
-        $this->denyAccessUnlessGranted('edit', $product);
+        $this->denyAccessUnlessGranted('isUser', $product);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -150,7 +150,7 @@ class ProductController extends AbstractController
      */
     public function delete(Request $request, Product $product): Response
     {
-        $this->denyAccessUnlessGranted('edit', $product);
+        $this->denyAccessUnlessGranted('isUser', $product);
 
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
