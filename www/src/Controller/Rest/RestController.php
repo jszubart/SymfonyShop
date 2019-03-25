@@ -30,7 +30,7 @@ class RestController extends AbstractFOSRestController implements ClassResourceI
     /**
      * @Rest\Get("/products")
      */
-    public function getProducts(): View
+    public function getProducts()
     {
         $products = $this->entityManager->getRepository(Product::class)->findAll();
         $product = array();
@@ -38,7 +38,8 @@ class RestController extends AbstractFOSRestController implements ClassResourceI
             $product [] = [$value->getId(), $value->getName(), $value->getPrice()];
         }
         $data = json_encode($product);
-        return View::create($data, Response::HTTP_OK,[]);
+
+        return $this->handleView($this->view($data,Response::HTTP_OK));
 
     }
 
@@ -75,12 +76,13 @@ class RestController extends AbstractFOSRestController implements ClassResourceI
 
             $product->setName($request->get('name'));
             $product->setPrice($request->get('price'));
+            $product->setDescription($request->get('description'));
             $product->setDateOfCreation(new \DateTime());
             $product->setDateOfLastModification(new \DateTime());
 
             $this->entityManager->persist($product);
             $this->entityManager->flush();
-            return $this->handleView($this->view(['status' => 'ok'],Response::HTTP_CREATED));
+            return $this->handleView($this->view($product,Response::HTTP_CREATED));
         }
         return $this->handleView($this->view($form->getErrors()));
     }
