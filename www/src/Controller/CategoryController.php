@@ -40,7 +40,6 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category->setUser($this->getUser());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);

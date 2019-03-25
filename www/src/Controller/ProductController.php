@@ -54,9 +54,7 @@ class ProductController extends AbstractController
                $image->setProduct($product);
                $image->setDateOfCreation(new \DateTime());
                $image->setMain(0);
-               $product->setUser($this->getUser());
                $product->setImages($image);
-
 
                $entityManager->persist($image);
            }

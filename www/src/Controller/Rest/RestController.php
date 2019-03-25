@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Rest;
 
 use App\Entity\Product;
 use App\Form\ProductType;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
-/**
- * @Route("/api", name="api_")
- */
-class RestController extends AbstractFOSRestController
+class RestController extends AbstractFOSRestController implements ClassResourceInterface
 {
     /**
      * @var EntityManagerInterface
@@ -29,34 +30,43 @@ class RestController extends AbstractFOSRestController
     /**
      * @Rest\Get("/products")
      */
-    public function getProducts()
+    public function getProducts(): View
     {
         $products = $this->entityManager->getRepository(Product::class)->findAll();
         $product = array();
         foreach ($products as $value) {
             $product [] = [$value->getId(), $value->getName(), $value->getPrice()];
         }
-        return $this->handleView($this->view($product, Response::HTTP_OK));
+        $data = json_encode($product);
+        return View::create($data, Response::HTTP_OK,[]);
+
     }
 
     /**
-     * @Rest\Get("/products/{product_id]")
+     * @Rest\Get("/products/{product_id}")
      */
-    public function getProduct(int $product_id): Response
+    public function getProduct($product_id): Response
     {
         $product = $this->entityManager->getRepository(Product::class)->find($product_id);
+        $normalizer = [new ObjectNormalizer()];
+        $encoder = [new JsonEncoder()];
+        $serializer = new Serializer($normalizer,$encoder);
 
-        return $this->handleView($this->view($product,Response::HTTP_OK));
+        $serializedProduct = $serializer->serialize($product,'json',[
+            'ignored_attributes' => ['category'],
+           'circular_reference_handler' => function ($object) {
+            return $object->getId();
+           }
+        ]);
+        return new Response($serializedProduct, 200, ['Content-Type' => 'application/json']);
     }
 
     /**
-     * @Rest\Post("/product")
+     * @Rest\Post("/products/new")
      */
     public function postProduct(Request $request)
     {
         $product = new Product();
-
-        $this->denyAccessUnlessGranted('isUser', $product);
 
         $form = $this->createForm(ProductType::class, $product);
         $data = json_decode($request->getContent(),true);
@@ -76,13 +86,11 @@ class RestController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Put("/products/{product_id]")
+     * @Rest\Put("/products/{product_id}")
      */
     public function putProduct(int $product_id, Request $request): Response
     {
         $product = $this->entityManager->getRepository(Product::class)->find($product_id);
-
-        $this->denyAccessUnlessGranted('edit', $product);
 
         $form = $this->createForm(ProductType::class, $product);
         $data = json_decode($request->getContent(),true);
@@ -102,13 +110,11 @@ class RestController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Delete("products/{product_id}")
+     * @Rest\Delete("/products/{product_id}")
      */
     public function deleteProduct(int $product_id)
     {
         $product = $this->entityManager->getRepository(Product::class)->find($product_id);
-
-        $this->denyAccessUnlessGranted('edit', $product);
 
         $this->entityManager->remove($product);
         $this->entityManager->flush();

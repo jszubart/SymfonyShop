@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,12 +41,6 @@ class Category
      * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="category")
      */
     private $products;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="categories")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     public function __construct()
     {
@@ -108,42 +101,18 @@ class Category
     }
 
     /**
-     * @return Collection|Product[]
+     * @return mixed
      */
-    public function getProducts(): Collection
+    public function getProducts()
     {
         return $this->products;
     }
 
-    public function addProduct(Product $product): self
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products): void
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->addCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            $product->removeCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
+        $this->products = $products;
     }
 }
