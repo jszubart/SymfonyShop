@@ -37,7 +37,8 @@ class ProductType extends AbstractType
                 'label' => 'Please Upload photo',
                 'mapped' => false,
                 'data_class' => null,
-                'required' => false
+                'required' => true,
+                'attr' => array('accept' =>'image/*')
             ])
         ;
     }
