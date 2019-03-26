@@ -48,22 +48,6 @@ class User implements UserInterface
      */
     private $plainPassword;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="user")
-     */
-    private $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="user")
-     */
-    private $categories;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-        $this->categories = new ArrayCollection();
-    }
-
 
     public function getId(): ?int
     {
@@ -159,68 +143,6 @@ class User implements UserInterface
         $this->plainPassword = $plainPassword;
 
         $this->password = null;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            // set the owning side to null (unless already changed)
-            if ($product->getUser() === $this) {
-                $product->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-            $category->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        if ($this->categories->contains($category)) {
-            $this->categories->removeElement($category);
-            // set the owning side to null (unless already changed)
-            if ($category->getUser() === $this) {
-                $category->setUser(null);
-            }
-        }
 
         return $this;
     }

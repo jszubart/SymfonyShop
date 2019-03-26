@@ -43,31 +43,23 @@
             </table>
         </div>
         <div class="col">
-            {% for image in product.images %}
-                {% if image.main == 1 %}
-                    <img src="{{ asset(image.path) }}" height="300" width="400"/>
-                {% endif %}
-            {% endfor %}
+                <img src="{{ asset(product.getMainImage) }}" height="300" width="400"/>
         </div>
     </div>
+
     <h3>Product images:</h3>
         <div class="mb-5">
             {% for image in product.images %}
                 <img src="{{ asset(image.path) }}" height="200" width="250"/>
             {% endfor %}
         </div>
-
-    {%  if is_granted('edit', product) %}
+    {%  if is_granted('isUser', product) %}
         <a href="{{ path('product_edit', {'id': product.id}) }}">
             <button type = "button" class = "btn btn-primary">Edit</button>
         </a>
-
         <p> {{ include('product/_delete_form.html.twig') }}</p>
     {% endif  %}
-
     <a href="{{ path('product_index') }}">
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
-
-
 {% endblock %}

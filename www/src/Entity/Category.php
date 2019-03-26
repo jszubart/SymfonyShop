@@ -43,11 +43,6 @@ class Category
      */
     private $products;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="categories")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     public function __construct()
     {
@@ -131,18 +126,6 @@ class Category
             $this->products->removeElement($product);
             $product->removeCategory($this);
         }
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

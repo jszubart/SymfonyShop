@@ -40,7 +40,6 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category->setUser($this->getUser());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
@@ -77,7 +76,7 @@ class CategoryController extends AbstractController
      */
     public function edit(Request $request, Category $category): Response
     {
-        $this->denyAccessUnlessGranted('edit', $category);
+        $this->denyAccessUnlessGranted('isUser', $category);
 
         $category->setDateOfLastModification(new \DateTime());
         $form = $this->createForm(CategoryType::class, $category);
@@ -107,7 +106,7 @@ class CategoryController extends AbstractController
      */
     public function delete(Request $request, Category $category): Response
     {
-        $this->denyAccessUnlessGranted('edit', $category);
+        $this->denyAccessUnlessGranted('isUser', $category);
 
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
