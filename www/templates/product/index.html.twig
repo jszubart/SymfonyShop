@@ -30,11 +30,9 @@
                     <a href="{{ path('product_show', {'id': product.id}) }}">
                         <button type = "button" class = "btn btn-dark">Show</button>
                     </a>
-                    {%  if is_granted('edit', product) %}
                         <a href="{{ path('product_edit', {'id': product.id}) }}">
                             <button type = "button" class = "btn btn-primary">Edit</button>
                         </a>
-                    {% endif %}
                 </td>
             </tr>
         {% else %}
