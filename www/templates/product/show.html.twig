@@ -43,11 +43,7 @@
             </table>
         </div>
         <div class="col">
-            {% for image in product.images %}
-                {% if image.main == 1 %}
-                    <img src="{{ asset(image.path) }}" height="300" width="400"/>
-                {% endif %}
-            {% endfor %}
+                <img src="{{ asset(product.getMainImage) }}" height="300" width="400"/>
         </div>
     </div>
 
@@ -60,27 +56,31 @@
         <a href="{{ path('cart_index') }}">
             <button id="add_cart" value="{{ product.id }}" type = "button" class = "btn btn-warning">Add to Cart</button>
         </a>
+
+    {%  if is_granted('isUser', product) %}
+
         <a href="{{ path('product_edit', {'id': product.id}) }}">
             <button type = "button" class = "btn btn-primary">Edit</button>
         </a>
-
         <p> {{ include('product/_delete_form.html.twig') }}</p>
 
-    <a href="{{ path('product_index') }}">
-        <button type = "button" class = "btn btn-secondary">Back to list</button>
-    </a>
+        <a href="{{ path('product_index') }}">
+            <button type = "button" class = "btn btn-secondary">Back to list</button>
+        </a>
+    {% endif  %}
 
-<script type="text/javascript">
-    $('#add_cart').click(function () {
-        var id = $(this).val();
-        $.ajax({
-            url: "{{ path('cart_add', {'id': product.id}) }}",
-            type: "GET",
-            data: {id : id},
-            success: function () {
-                console.log(id);
-            }
+    <script type="text/javascript">
+        $('#add_cart').click(function () {
+            var id = $(this).val();
+            $.ajax({
+                url: "{{ path('cart_add', {'id': product.id}) }}",
+                type: "GET",
+                data: {id : id},
+                success: function () {
+                    console.log(id);
+                }
+            });
         });
-    });
-</script>
+    </script>
+    
 {% endblock %}

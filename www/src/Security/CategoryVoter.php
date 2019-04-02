@@ -40,11 +40,6 @@ class CategoryVoter extends Voter
             return false;
         }
 
-        /**
-         * @var Category
-         */
-        $category = $subject;
-
         switch ($attribute) {
 
             case self::isUser:
@@ -54,7 +49,6 @@ class CategoryVoter extends Voter
 
                 break;
         }
-
         throw new \LogicException('This code should not be reached');
     }
 }

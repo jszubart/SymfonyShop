@@ -40,11 +40,6 @@ class ProductVoter extends Voter
             return false;
         }
 
-        /**
-         * @var Product
-         */
-        $product = $subject;
-
         switch ($attribute) {
 
             case self::isUser:
@@ -53,10 +48,7 @@ class ProductVoter extends Voter
                 }
 
                 break;
-
         }
-
         throw new \LogicException('This code should not be reached');
     }
-
 }

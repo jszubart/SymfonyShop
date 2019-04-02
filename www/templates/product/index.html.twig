@@ -27,12 +27,14 @@
                 <td>{{ product.dateOfCreation ? product.dateOfCreation|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ product.dateOfLastModification ? product.dateOfLastModification|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('product_show', {'id': product.id}) }}">
-                        <button type = "button" class = "btn btn-dark">Show</button>
-                    </a>
+                    {%  if is_granted('isUser', product) %}
+                        <a href="{{ path('product_show', {'id': product.id}) }}">
+                            <button type = "button" class = "btn btn-dark">Show</button>
+                        </a>
                         <a href="{{ path('product_edit', {'id': product.id}) }}">
                             <button type = "button" class = "btn btn-primary">Edit</button>
                         </a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
