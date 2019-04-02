@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block body %}
+    <h3>Shopping cart template v1</h3>
+    <p>Your products:</p>
+    <div class="row">
+        <div class="ml-5 col-6">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Price (in $)</th>
+                        <th>Quantity</th>
+                        <th>Summary</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('product_show', {'id': product.id}) }}">{{ product.name }} </a>
+                        </td>
+                        <td>
+                           <input id="price" value="{{ product.price }}" class="text-center border-0" readonly>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" data-quantity="minus" data-field="quantity">-</button>
+                            <input id ="quantity" class="input text-center" type="number" name="quantity" value="1" readonly>
+                            <button class="btn btn-secondary btn-sm" data-quantity="plus" data-field="quantity">+</button>
+                        </td>
+                        <td>
+                            <input type="text" id="total" class="text-center border-0" value="{{ product.price }} $" readonly />
+                        </td>
+                        <td>
+                            <form method="post" action="{{ path('cart_delete') }}">
+                                <input type="hidden" value="{{ product.id }}" name="remove_product">
+                                <button type="submit" id="remove-row" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4 ml-4">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="2">Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sub total</td>
+                        <td>
+                            <input type="text" id="sub_total" class="text-center border-0" value="" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Shipping</td>
+                        <td>
+                            <input type="text" id="shipping" class="text-center border-0" value="5 $" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>
+                            <input type="text" id="summary" class="text-center border-0" value="" readonly/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-secondary">Checkout</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('[data-quantity="plus"]').click(function(e){
+                e.preventDefault();
+                fieldName = $(this).attr('data-field');
+                var getInput = $(this).closest('td');
+                var currentVal = $(getInput).find('input[name='+fieldName+']').val();
+                if (!isNaN(currentVal)) {
+                    $(getInput).parent('tr').find('input[name='+fieldName+']').val(+currentVal + 1);
+                } else {
+                    $(getInput).parent('tr').find('input[name='+fieldName+']').val(0)
+                }
+            });
+            $('[data-quantity="minus"]').click(function(e) {
+                e.preventDefault();
+                var getInput = $(this).closest('td');
+                fieldName = $(this).attr('data-field');
+                var currentVal = $(getInput).find('input[name='+fieldName+']').val();
+                if (!isNaN(currentVal) && currentVal > 0) {
+                    $(getInput).parent('tr').find('input[name='+fieldName+']').val(+currentVal - 1);
+                } else  {
+                    $(getInput).parent('tr').find('input[name='+fieldName+']').val(0)
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            var initial_sum = 0;
+            $('tr').each(function () {
+                $(this).find('#total').each(function () {
+                    initial_sum = initial_sum + parseInt($(this).val());
+                });
+                $('#sub_total').val(initial_sum + ' $');
+                $('#summary').val(initial_sum + parseInt($('#shipping').val()) + ' $');
+            });
+            $('[data-quantity]').click(function(){
+                var getInput = $(this).closest('td');
+                fieldName = $(this).attr('data-field');
+                var updated_sum = 0;
+                var price = $(getInput).parent('tr').find('#price').val();
+                total = price * $(getInput).parent('tr').find('#quantity').val();
+                $(getInput).parent('tr').find('#total').val(total + ' $');
+                 $('tr').each(function () {
+                    $(this).find('#total').each(function () {
+                        updated_sum = updated_sum + parseInt($(this).val());
+                    });
+                    $('#sub_total').val(updated_sum + ' $');
+                    $('#summary').val(updated_sum + parseInt($('#shipping').val()) + ' $')
+                 });
+            });
+        });
+    </script>
+
+{% endblock %}

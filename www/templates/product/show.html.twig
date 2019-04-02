@@ -50,13 +50,16 @@
             {% endfor %}
         </div>
     </div>
+
     <h3>Product images:</h3>
         <div class="mb-5">
             {% for image in product.images %}
                 <img src="{{ asset(image.path) }}" height="200" width="250"/>
             {% endfor %}
         </div>
-
+        <a href="{{ path('cart_index') }}">
+            <button id="add_cart" value="{{ product.id }}" type = "button" class = "btn btn-warning">Add to Cart</button>
+        </a>
         <a href="{{ path('product_edit', {'id': product.id}) }}">
             <button type = "button" class = "btn btn-primary">Edit</button>
         </a>
@@ -67,5 +70,17 @@
         <button type = "button" class = "btn btn-secondary">Back to list</button>
     </a>
 
-
+<script type="text/javascript">
+    $('#add_cart').click(function () {
+        var id = $(this).val();
+        $.ajax({
+            url: "{{ path('cart_add', {'id': product.id}) }}",
+            type: "GET",
+            data: {id : id},
+            success: function () {
+                console.log(id);
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -125,8 +125,6 @@ class ProductController extends AbstractController
 
             $product->setDateOfLastModification(new \DateTime());
 
-            $this->denyAccessUnlessGranted('edit',$product);
-
             $entityManager->persist($product);
             $entityManager->flush();
 
